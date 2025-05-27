@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farewell Message</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 50px;
+      height: 70px;
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-600px); opacity: 0; }
+    }
+    .balloon:nth-child(1) { left: 20%; background: red; animation-delay: 0s; }
+    .balloon:nth-child(2) { left: 40%; background: blue; animation-delay: 1s; }
+    .balloon:nth-child(3) { left: 60%; background: yellow; animation-delay: 2s; }
+    .balloon:nth-child(4) { left: 80%; background: green; animation-delay: 3s; }
+    .message {
+      animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const FarewellCard = () => {
+      const [showPopup, setShowPopup] = useState(false);
+      const colleagueName = "Hemant";
+      const message = "Wishing you all the best in your next adventure! Your contributions at Nagarro were truly invaluable, and your presence will be deeply missed.";
+
+      const triggerConfetti = () => {
+        confetti({
+          particleCount: 200,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      };
+
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <button
+            className="bg-blue-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-600 transition"
+            onClick={() => {
+              setShowPopup(true);
+              triggerConfetti();
+            }}
+          >
+            Click Here
+          </button>
+          {showPopup && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="relative bg-white rounded-xl shadow-lg p-8 max-w-md mx-4 text-center overflow-hidden">
+                <div className="balloon"></div>
+                <div className="balloon"></div>
+                <div className="balloon"></div>
+                <div className="balloon"></div>
+                <h1 className="text-3xl font-bold text-gray-800 mb-4 message">
+                  Farewell, {colleagueName}!
+                </h1>
+                <p className="text-gray-600 mb-6 message">
+                  {message}
+                </p>
+                <button
+                  className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition"
+                  onClick={() => setShowPopup(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.render(<FarewellCard />, document.getElementById('root'));
+  </script>
+</body>
+</html>
